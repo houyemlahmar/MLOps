@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/MSI/mlops-project/mlruns/866878929381462632/97d76269495547d4b1949a394cf5a37e/artifacts
+end_time: 1764518450029
+entry_point_name: ''
+experiment_id: '866878929381462632'
+lifecycle_stage: active
+run_id: 97d76269495547d4b1949a394cf5a37e
+run_name: spiffy-kite-438
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764518449942
+status: 3
+tags: []
+user_id: MSI

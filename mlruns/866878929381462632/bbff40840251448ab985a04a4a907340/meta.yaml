@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/MSI/mlops-project/mlruns/866878929381462632/bbff40840251448ab985a04a4a907340/artifacts
+end_time: 1764518422718
+entry_point_name: ''
+experiment_id: '866878929381462632'
+lifecycle_stage: active
+run_id: bbff40840251448ab985a04a4a907340
+run_name: worried-robin-361
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764518422604
+status: 3
+tags: []
+user_id: MSI

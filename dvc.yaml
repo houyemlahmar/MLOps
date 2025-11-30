@@ -1,0 +1,9 @@
+stages:
+  train:
+    cmd: python -m src.train --n_estimators 100 --test_size 0.2
+    deps:
+      - src/train.py
+      - src/data.py
+      - data/raw/diabetes.csv
+    outs:
+      - models/model.pkl
