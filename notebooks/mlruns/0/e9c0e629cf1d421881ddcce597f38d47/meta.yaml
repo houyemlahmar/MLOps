@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/MSI/mlops-project/notebooks/mlruns/0/e9c0e629cf1d421881ddcce597f38d47/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e9c0e629cf1d421881ddcce597f38d47
+run_name: learned-snake-685
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764800115017
+status: 1
+tags: []
+user_id: MSI

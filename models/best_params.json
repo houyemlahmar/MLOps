@@ -1,0 +1,32 @@
+{
+    "LogisticRegression": {
+        "best_params": {
+            "C": 0.01,
+            "penalty": "l2",
+            "solver": "lbfgs"
+        },
+        "best_score": 0.9522305804159785
+    },
+    "RandomForest_Grid": {
+        "best_params": {
+            "max_depth": 10,
+            "min_samples_split": 2,
+            "n_estimators": 200
+        },
+        "best_score": 0.9707002239155973
+    },
+    "RandomForest_Random": {
+        "best_params": {
+            "max_depth": 11,
+            "min_samples_leaf": 5,
+            "min_samples_split": 8,
+            "n_estimators": 221
+        },
+        "best_score": 0.9709295306596959
+    },
+    "TestScores": {
+        "LogReg_Test": 0.9502415057375256,
+        "RF_Grid_Test": 0.9707342692394161,
+        "RF_Random_Test": 0.970688658637323
+    }
+}

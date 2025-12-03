@@ -1,0 +1,10 @@
+[
+    "age",
+    "bmi",
+    "HbA1c_level",
+    "blood_glucose_level",
+    "hypertension",
+    "heart_disease",
+    "gender",
+    "smoking_history"
+]

@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/MSI/mlops-project/mlruns/912428158223988967/models/m-7040edc2cf7046689387fa1e88351e2f/artifacts
+creation_timestamp: 1764801984469
+experiment_id: '912428158223988967'
+last_updated_timestamp: 1764802000376
+model_id: m-7040edc2cf7046689387fa1e88351e2f
+model_type: null
+name: model
+source_run_id: 1a66ccf6a5294010a76bee82ce201f41
+status: 2
+status_message: null

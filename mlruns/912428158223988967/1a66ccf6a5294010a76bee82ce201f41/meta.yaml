@@ -1,0 +1,14 @@
+artifact_uri: file:///C:/Users/MSI/mlops-project/mlruns/912428158223988967/1a66ccf6a5294010a76bee82ce201f41/artifacts
+end_time: 1764802000405
+entry_point_name: ''
+experiment_id: '912428158223988967'
+lifecycle_stage: active
+run_id: 1a66ccf6a5294010a76bee82ce201f41
+run_name: unequaled-fish-909
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1764801982789
+status: 3
+tags: []
+user_id: MSI

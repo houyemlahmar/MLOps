@@ -1,0 +1,6 @@
+artifact_location: file:///C:/Users/MSI/mlops-project/mlruns/912428158223988967
+creation_time: 1764801982392
+experiment_id: '912428158223988967'
+last_update_time: 1764801982392
+lifecycle_stage: active
+name: diabetes_prediction_final

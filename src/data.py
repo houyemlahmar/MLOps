@@ -34,3 +34,11 @@ def split(df: pd.DataFrame, test_size: float):
     X = df.drop("diabetes", axis=1)   # adjust if label column name differs
     y = df["diabetes"]
     return train_test_split(X, y, test_size=test_size, random_state=42)
+
+# ----------------------------------------
+# 4. Load processed data
+# ----------------------------------------
+def load_processed(path: str) -> pd.DataFrame:
+    return pd.read_csv(path)
+
+
