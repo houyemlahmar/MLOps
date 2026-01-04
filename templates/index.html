@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Prediction System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 Diabetes Prediction System</h1>
+            <p class="subtitle">AI-powered diabetes risk assessment using advanced machine learning</p>
+        </header>
+
+        <div class="content-wrapper">
+            <div class="form-section">
+                <h2>Patient Information</h2>
+                <form id="predictionForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="age">
+                                <span class="label-icon">👤</span> Age (years)
+                            </label>
+                            <input type="number" id="age" name="age" min="18" max="120" step="1" value="45" required>
+                            <span class="helper-text">Patient's age in years</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bmi">
+                                <span class="label-icon">⚖️</span> BMI (kg/m²)
+                            </label>
+                            <input type="number" id="bmi" name="bmi" min="10" max="60" step="0.1" value="25.0" required>
+                            <span class="helper-text">Body Mass Index</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="HbA1c_level">
+                                <span class="label-icon">🩸</span> HbA1c Level (%)
+                            </label>
+                            <input type="number" id="HbA1c_level" name="HbA1c_level" min="3" max="15" step="0.1" value="5.5" required>
+                            <span class="helper-text">Hemoglobin A1c percentage</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="blood_glucose_level">
+                                <span class="label-icon">💉</span> Blood Glucose (mg/dL)
+                            </label>
+                            <input type="number" id="blood_glucose_level" name="blood_glucose_level" min="50" max="400" step="1" value="100" required>
+                            <span class="helper-text">Fasting blood glucose level</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hypertension">
+                                <span class="label-icon">💓</span> Hypertension
+                            </label>
+                            <select id="hypertension" name="hypertension" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <span class="helper-text">Has high blood pressure</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="heart_disease">
+                                <span class="label-icon">❤️</span> Heart Disease
+                            </label>
+                            <select id="heart_disease" name="heart_disease" required>
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                            <span class="helper-text">Has heart disease</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender">
+                                <span class="label-icon">👥</span> Gender
+                            </label>
+                            <select id="gender" name="gender" required>
+                                <option value="0">Female</option>
+                                <option value="1">Male</option>
+                            </select>
+                            <span class="helper-text">Biological gender</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="smoking_history">
+                                <span class="label-icon">🚬</span> Smoking History
+                            </label>
+                            <select id="smoking_history" name="smoking_history" required>
+                                <option value="0">Never</option>
+                                <option value="1">Former</option>
+                                <option value="2">Current</option>
+                                <option value="3">Not Current</option>
+                                <option value="4">Ever</option>
+                            </select>
+                            <span class="helper-text">Smoking status</span>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-icon">🔍</span> Predict Risk
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <span class="btn-icon">🔄</span> Reset
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="loadSample('high-risk')">
+                            <span class="btn-icon">📊</span> Load High Risk Sample
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Prediction Results</h2>
+                
+                <div class="result-card" id="resultCard">
+                    <div class="result-header">
+                        <div class="result-icon" id="resultIcon">🎯</div>
+                        <div class="result-main">
+                            <h3 id="resultLabel">-</h3>
+                            <p class="result-confidence">Confidence: <span id="resultConfidence">-</span></p>
+                        </div>
+                    </div>
+
+                    <div class="probability-bars">
+                        <div class="prob-item">
+                            <div class="prob-label">
+                                <span>Non-Diabetic</span>
+                                <span class="prob-value" id="probNonDiabetic">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill non-diabetic" id="barNonDiabetic" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="prob-item">
+                            <div class="prob-label">
+                                <span>Diabetic</span>
+                                <span class="prob-value" id="probDiabetic">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill diabetic" id="barDiabetic" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="result-details" id="resultDetails">
+                        <h4>Input Summary</h4>
+                        <div class="details-grid" id="detailsGrid"></div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Note:</strong> This prediction is based on a machine learning model with 97.07% accuracy. 
+                    Always consult with healthcare professionals for medical advice.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+            <p>Analyzing patient data...</p>
+        </div>
+
+        <footer>
+            <p>Diabetes Prediction System v1.0.0 | Powered by Random Forest ML Model (ROC-AUC: 97.07%)</p>
+            <p><a href="/info" target="_blank">API Documentation</a> | <a href="https://github.com" target="_blank">GitHub</a></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

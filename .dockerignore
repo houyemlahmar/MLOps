@@ -1,0 +1,69 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+mlops_env/
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# DVC
+.dvc/
+dvc-storage/
+*.dvc.tmp
+
+# MLflow
+mlruns/
+.mlflow/
+
+# Jupyter
+.ipynb_checkpoints/
+notebooks/mlruns/
+
+# Data (optional - keep if you want to include raw data in image)
+# data/raw/*.csv
+# data/processed/*.csv
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Documentation
+*.md
+docs/
+
+# Tests
+tests/
+pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp

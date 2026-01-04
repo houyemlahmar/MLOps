@@ -1,4 +1,4 @@
-artifact_uri: file:///C:/Users/MSI/mlops-project/mlruns/866878929381462632/bbff40840251448ab985a04a4a907340/artifacts
+artifact_uri: file:///mlflow/mlruns/866878929381462632/bbff40840251448ab985a04a4a907340/artifacts
 end_time: 1764518422718
 entry_point_name: ''
 experiment_id: '866878929381462632'
