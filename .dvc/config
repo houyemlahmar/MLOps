@@ -1,0 +1,8 @@
+[core]
+    remote = localremote
+['remote "gdrive_remote"']
+    url = gdrive://1D7hihtU7bUEqZvwfdU00zxhfSDZjmExH
+    gdrive_use_service_account = false
+    gdrive_service_account_json_file_path = C:/Users/MSI/mlops-service-account.json
+['remote "localremote"']
+    url = ../dvc-storage
