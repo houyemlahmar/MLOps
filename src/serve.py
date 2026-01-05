@@ -12,12 +12,14 @@ Date: January 2026
 import os
 import json
 import logging
+import time
 from typing import Dict, List, Any
 
 import joblib
 import pandas as pd
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
 
 # Configure logging
 logging.basicConfig(
@@ -31,6 +33,35 @@ app = Flask(__name__,
             template_folder='../templates',
             static_folder='../static')
 CORS(app)  # Enable CORS for all routes
+
+# Prometheus Metrics
+REQUEST_COUNT = Counter(
+    'prediction_requests_total',
+    'Total number of prediction requests',
+    ['method', 'endpoint', 'prediction']
+)
+
+REQUEST_LATENCY = Histogram(
+    'prediction_duration_seconds',
+    'Prediction request latency in seconds',
+    buckets=[0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0]
+)
+
+PREDICTION_PROBABILITY = Gauge(
+    'prediction_probability',
+    'Last prediction probability score'
+)
+
+DATA_DRIFT = Gauge(
+    'data_drift_detected',
+    'Data drift detection status (1 = drift, 0 = no drift)'
+)
+
+MODEL_INFO_GAUGE = Gauge(
+    'model_info',
+    'Model metadata',
+    ['model_type', 'version']
+)
 
 # Global variables for model and features
 model = None
@@ -196,6 +227,8 @@ def predict():
     Returns:
         JSON response with prediction and probability
     """
+    start_time = time.time()
+    
     try:
         # Get JSON data from request
         data = request.get_json()
@@ -219,6 +252,15 @@ def predict():
         prediction = model.predict(input_df)[0]
         prediction_proba = model.predict_proba(input_df)[0]
         
+        # Update Prometheus metrics
+        prediction_probability = float(prediction_proba[1])
+        REQUEST_COUNT.labels(
+            method='POST',
+            endpoint='/predict',
+            prediction=str(int(prediction))
+        ).inc()
+        PREDICTION_PROBABILITY.set(prediction_probability)
+        
         # Prepare response
         response = {
             'prediction': int(prediction),
@@ -230,6 +272,9 @@ def predict():
             'confidence': float(max(prediction_proba)),
             'input_features': processed_data
         }
+        
+        # Record latency
+        REQUEST_LATENCY.observe(time.time() - start_time)
         
         logger.info(f"Prediction made: {response['prediction_label']} (confidence: {response['confidence']:.4f})")
         
@@ -362,6 +407,17 @@ def main():
     logger.info(f"Starting Flask server on {host}:{port}")
     logger.info(f"API Documentation available at http://{host}:{port}/info")
     app.run(host=host, port=port, debug=debug)
+
+
+@app.route('/metrics')
+def metrics():
+    """
+    Prometheus metrics endpoint
+    
+    Returns:
+        Prometheus-formatted metrics
+    """
+    return generate_latest(), 200, {'Content-Type': CONTENT_TYPE_LATEST}
 
 
 if __name__ == '__main__':
