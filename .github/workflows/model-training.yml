@@ -45,6 +45,8 @@ jobs:
         dvc pull || echo "DVC pull failed, continuing..."
     
     - name: Train model
+      env:
+        MLFLOW_TRACKING_URI: file:./mlruns
       run: |
         python src/train_final.py
     

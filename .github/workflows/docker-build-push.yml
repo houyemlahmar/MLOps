@@ -80,8 +80,12 @@ jobs:
           --location=${{ env.GCP_REGION }} \
           --description="Diabetes prediction model Docker images" || true
         
+        # Get the first tag (main or latest)
+        IMAGE_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n1)
+        echo "Source image: $IMAGE_TAG"
+        
         # Tag image for GCP
-        docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:latest \
+        docker tag $IMAGE_TAG \
           ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/diabetes-prediction/api:latest
         
         # Push to GCP
