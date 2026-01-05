@@ -10,6 +10,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME_LOWER: houyemlahmar/mlops
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_REGION: us-central1
 
@@ -38,7 +39,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}
         tags: |
           type=ref,event=branch
           type=ref,event=pr
@@ -80,7 +81,7 @@ jobs:
           --description="Diabetes prediction model Docker images" || true
         
         # Tag image for GCP
-        docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+        docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_LOWER }}:latest \
           ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/diabetes-prediction/api:latest
         
         # Push to GCP
