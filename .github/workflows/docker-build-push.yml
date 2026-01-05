@@ -60,22 +60,18 @@ jobs:
         platforms: linux/amd64
     
     - name: Authenticate to Google Cloud
-      if: ${{ secrets.GCP_PROJECT_ID != '' }}
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}
     
     - name: Set up Cloud SDK
-      if: ${{ secrets.GCP_PROJECT_ID != '' }}
       uses: google-github-actions/setup-gcloud@v2
     
     - name: Configure Docker for GCP
-      if: ${{ secrets.GCP_PROJECT_ID != '' }}
       run: |
         gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
     
     - name: Tag and push to GCP Artifact Registry
-      if: ${{ secrets.GCP_PROJECT_ID != '' }}
       run: |
         # Create repository if it doesn't exist
         gcloud artifacts repositories create diabetes-prediction \
