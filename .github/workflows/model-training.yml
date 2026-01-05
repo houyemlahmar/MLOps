@@ -1,0 +1,108 @@
+name: Model Training Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_retrain:
+        description: 'Force model retraining'
+        required: false
+        default: 'false'
+  schedule:
+    # Run every Monday at 2 AM UTC
+    - cron: '0 2 * * 1'
+  push:
+    paths:
+      - 'data/**'
+      - 'params.yaml'
+      - 'src/train_final.py'
+
+env:
+  PYTHON_VERSION: '3.13'
+
+jobs:
+  train-model:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Setup DVC
+      run: |
+        pip install dvc
+        dvc pull || echo "DVC pull failed, continuing..."
+    
+    - name: Train model
+      run: |
+        python src/train_final.py
+    
+    - name: Evaluate model
+      run: |
+        python -c "
+        import joblib
+        import json
+        from pathlib import Path
+        
+        # Load model
+        model = joblib.load('models/final/model.pkl')
+        print(f'✅ Model trained: {type(model).__name__}')
+        
+        # Load metrics
+        with open('models/best_params.json', 'r') as f:
+            params = json.load(f)
+        
+        print(f'✅ Model ROC-AUC: {params.get(\"best_score\", 0):.4f}')
+        print(f'✅ Best parameters: {params.get(\"best_params\", {})}')
+        "
+    
+    - name: Upload model artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: trained-model
+        path: |
+          models/final/model.pkl
+          models/best_params.json
+          src/selected_features.json
+    
+    - name: Commit model changes
+      if: github.event.inputs.force_retrain == 'true' || github.event_name == 'schedule'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add models/best_params.json
+        git diff --quiet && git diff --staged --quiet || git commit -m "chore: Update model training results [automated]"
+        git push
+    
+    - name: Send Slack notification
+      if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      uses: slackapi/slack-github-action@v1
+      with:
+        payload: |
+          {
+            "text": "✅ Model Training Complete",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Model Training Pipeline* - Completed ✅\n*Trigger:* ${{ github.event_name }}\n*Branch:* ${{ github.ref_name }}"
+                }
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      continue-on-error: true

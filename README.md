@@ -1,6 +1,14 @@
 # 🏥 Diabetes Prediction MLOps Project
 
-A complete **MLOps pipeline** for predicting diabetes using machine learning with **experiment tracking**, **data versioning**, **hyperparameter optimization**, and **model registry**.
+[![CI Tests](https://github.com/houyemlahmar/MLOps/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/houyemlahmar/MLOps/actions/workflows/ci-tests.yml)
+[![Docker Build](https://github.com/houyemlahmar/MLOps/actions/workflows/docker-build-push.yml/badge.svg)](https://github.com/houyemlahmar/MLOps/actions/workflows/docker-build-push.yml)
+[![Deploy to GCP](https://github.com/houyemlahmar/MLOps/actions/workflows/deploy-gcp.yml/badge.svg)](https://github.com/houyemlahmar/MLOps/actions/workflows/deploy-gcp.yml)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
+[![MLflow](https://img.shields.io/badge/MLflow-3.6.0-blue.svg)](https://mlflow.org/)
+[![Docker](https://img.shields.io/badge/docker-ready-brightgreen.svg)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+A complete **MLOps pipeline** for predicting diabetes using machine learning with **experiment tracking**, **data versioning**, **hyperparameter optimization**, **CI/CD automation**, and **GCP deployment**.
 
 ---
 
@@ -50,7 +58,18 @@ This project implements a production-ready machine learning pipeline for diabete
 - ✅ **MLflow Model Registry**: Model artifacts with signatures and metadata
 - ✅ **Parameterized Training**: Configurable hyperparameters via `params.yaml`
 - ✅ **REST API**: Production-ready Flask API for model serving (port 5002)
-- ✅ **API Testing**: Comprehensive test suite with 6 automated tests
+- ✅ **Web UI**: Professional responsive interface for predictions
+- ✅ **Docker Containerization**: Multi-service deployment with docker-compose
+- ✅ **CI/CD Pipeline**: Automated testing, building, and deployment with GitHub Actions
+- ✅ **Cloud Deployment**: GCP Cloud Run integration for scalable serving
+
+### 🚀 **CI/CD & Automation**
+- ✅ **Automated Testing**: Unit tests, data validation, and model performance checks
+- ✅ **Continuous Integration**: Linting, security scanning, and coverage reports
+- ✅ **Docker Build & Push**: Automated image building to GitHub Container Registry & GCP
+- ✅ **Cloud Deployment**: Automatic deployment to GCP Cloud Run on merge to main
+- ✅ **Scheduled Retraining**: Weekly model retraining (Mondays at 2 AM UTC)
+- ✅ **Slack Notifications**: Real-time alerts for deployments and failures
 
 ### � **REST API Endpoints**
 - ✅ **GET /health**: Health check and service status
@@ -261,6 +280,64 @@ docker-compose down
 docker-compose up -d --build
 ```
 
+---
+
+## 🔄 CI/CD Pipeline
+
+### GitHub Actions Workflows
+
+The project includes 4 automated workflows:
+
+#### 1. **CI Tests** (`.github/workflows/ci-tests.yml`)
+Triggers on every push and PR to `main`/`develop`:
+- ✅ Python linting with flake8
+- ✅ Unit tests and API tests
+- ✅ Data schema validation
+- ✅ Model performance validation
+- ✅ Security scanning with Trivy
+- ✅ Code coverage reporting
+
+#### 2. **Model Training** (`.github/workflows/model-training.yml`)
+Scheduled weekly (Monday 2 AM) or manual trigger:
+- ✅ Automated model retraining
+- ✅ Performance evaluation
+- ✅ Model artifact upload
+- ✅ Metrics commit to repository
+
+#### 3. **Docker Build & Push** (`.github/workflows/docker-build-push.yml`)
+Triggers on push to `main` or version tags:
+- ✅ Multi-platform Docker build
+- ✅ Push to GitHub Container Registry
+- ✅ Push to GCP Artifact Registry
+- ✅ Image tagging and versioning
+
+#### 4. **Deploy to GCP** (`.github/workflows/deploy-gcp.yml`)
+Triggers after successful Docker build:
+- ✅ Deploy to Cloud Run
+- ✅ Health check validation
+- ✅ Slack deployment notification
+- ✅ Automatic rollback on failure
+
+### Setup CI/CD
+
+1. **Configure GitHub Secrets:**
+   - See [`.github/SECRETS_SETUP.md`](.github/SECRETS_SETUP.md) for detailed instructions
+   - Required: `GCP_PROJECT_ID`, `GCP_SA_KEY`
+   - Optional: `SLACK_WEBHOOK_URL`
+
+2. **GCP Deployment:**
+   - Follow [`.github/GCP_DEPLOYMENT.md`](.github/GCP_DEPLOYMENT.md) for complete setup
+   - Service runs on GCP Cloud Run
+   - Auto-scaling: 0-10 instances
+   - Region: `us-central1`
+
+3. **Monitor Workflows:**
+   - View in GitHub Actions tab
+   - Check deployment logs in GCP Console
+   - Receive Slack notifications
+
+---
+
 ### 🔹 Local Development (Alternative)
 
 **Start the REST API Server + Web UI:**
@@ -412,7 +489,7 @@ The following features were selected based on correlation analysis and domain kn
 
 ## 🔮 Next Steps
 
-### 🎯 Immediate Priorities
+### 🎯 Completed Features ✅
 
 1. **Model Serving & Deployment** ✅ COMPLETED
    - [x] Implement REST API using Flask (`src/serve.py`)
@@ -426,18 +503,24 @@ The following features were selected based on correlation analysis and domain kn
    - [x] Docker containerization with docker-compose
    - [x] MLflow integration in containers
 
-2. **CI/CD Pipeline** 🎯 NEXT PRIORITY
-   - [ ] Set up GitHub Actions or GitLab CI
-   - [ ] Automate testing (unit tests, integration tests)
-   - [ ] Automate model retraining on data updates
-   - [ ] Deploy to cloud (AWS, Azure, GCP)
-   - [ ] Add container registry push (Docker Hub, ECR, GCR)
+2. **CI/CD Pipeline** ✅ COMPLETED
+   - [x] Set up GitHub Actions workflows
+   - [x] Automate testing (unit tests, data validation, model checks)
+   - [x] Automate model retraining on schedule (Mondays 2 AM)
+   - [x] Docker build and push to registries
+   - [x] Deploy to GCP Cloud Run
+   - [x] Slack notifications for deployments
+   - [x] Security scanning with Trivy
 
-3. **Monitoring & Observability**
+### 🎯 Future Enhancements
+
+3. **Monitoring & Observability** 🎯 NEXT PRIORITY
    - [ ] Implement model drift detection
-   - [ ] Add Prometheus metrics
+   - [ ] Add Prometheus metrics export
    - [ ] Set up Grafana dashboards
    - [ ] Log prediction requests and responses
+   - [ ] A/B testing framework
+   - [ ] Real-time performance monitoring
 
 4. **Model Evaluation & Validation**
    - [ ] Complete `src/eval.py` with comprehensive metrics
