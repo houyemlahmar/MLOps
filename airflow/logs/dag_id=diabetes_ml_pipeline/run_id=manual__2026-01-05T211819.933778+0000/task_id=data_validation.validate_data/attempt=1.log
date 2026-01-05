@@ -1,0 +1,52 @@
+[2026-01-05T21:18:21.774+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: diabetes_ml_pipeline.data_validation.validate_data manual__2026-01-05T21:18:19.933778+00:00 [queued]>
+[2026-01-05T21:18:21.790+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: diabetes_ml_pipeline.data_validation.validate_data manual__2026-01-05T21:18:19.933778+00:00 [queued]>
+[2026-01-05T21:18:21.792+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-05T21:18:21.814+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): data_validation.validate_data> on 2026-01-05 21:18:19.933778+00:00
+[2026-01-05T21:18:21.824+0000] {standard_task_runner.py:60} INFO - Started process 3833 to run task
+[2026-01-05T21:18:21.828+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'diabetes_ml_pipeline', 'data_validation.validate_data', 'manual__2026-01-05T21:18:19.933778+00:00', '--job-id', '17', '--raw', '--subdir', 'DAGS_FOLDER/diabetes_ml_pipeline.py', '--cfg-path', '/tmp/tmpf2oovcll']
+[2026-01-05T21:18:21.833+0000] {standard_task_runner.py:88} INFO - Job 17: Subtask data_validation.validate_data
+[2026-01-05T21:18:21.913+0000] {task_command.py:423} INFO - Running <TaskInstance: diabetes_ml_pipeline.data_validation.validate_data manual__2026-01-05T21:18:19.933778+00:00 [running]> on host b31418071fbd
+[2026-01-05T21:18:22.001+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='mlops-team' AIRFLOW_CTX_DAG_ID='diabetes_ml_pipeline' AIRFLOW_CTX_TASK_ID='data_validation.validate_data' AIRFLOW_CTX_EXECUTION_DATE='2026-01-05T21:18:19.933778+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-05T21:18:19.933778+00:00'
+[2026-01-05T21:18:22.246+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/taskinstance.py", line 428, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/diabetes_ml_pipeline.py", line 49, in validate_data
+    from src.data import load_data
+  File "/opt/airflow/project/src/data.py", line 2, in <module>
+    from sklearn.model_selection import train_test_split
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/__init__.py", line 83, in <module>
+    from .base import clone
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils import _IS_32BIT
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/utils/__init__.py", line 22, in <module>
+    from ._param_validation import Interval, validate_params
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/utils/_param_validation.py", line 15, in <module>
+    from .validation import _is_arraylike_not_scalar
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/utils/validation.py", line 25, in <module>
+    from ..utils._array_api import _asarray_with_order, _is_numpy_namespace, get_namespace
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/utils/_array_api.py", line 9, in <module>
+    from .fixes import parse_version
+  File "/home/airflow/.local/lib/python3.11/site-packages/sklearn/utils/fixes.py", line 19, in <module>
+    import scipy.stats
+  File "/home/airflow/.local/lib/python3.11/site-packages/scipy/stats/__init__.py", line 608, in <module>
+    from ._stats_py import *
+  File "/home/airflow/.local/lib/python3.11/site-packages/scipy/stats/_stats_py.py", line 37, in <module>
+    from numpy.testing import suppress_warnings
+  File "/home/airflow/.local/lib/python3.11/site-packages/numpy/testing/__init__.py", line 11, in <module>
+    from ._private.utils import *
+  File "/home/airflow/.local/lib/python3.11/site-packages/numpy/testing/_private/utils.py", line 57, in <module>
+    HAS_LAPACK64 = numpy.linalg._umath_linalg._ilp64
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'numpy.linalg._umath_linalg' has no attribute '_ilp64'
+[2026-01-05T21:18:22.269+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=diabetes_ml_pipeline, task_id=data_validation.validate_data, execution_date=20260105T211819, start_date=20260105T211821, end_date=20260105T211822
+[2026-01-05T21:18:22.285+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 17 for task data_validation.validate_data (module 'numpy.linalg._umath_linalg' has no attribute '_ilp64'; 3833)
+[2026-01-05T21:18:22.323+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-01-05T21:18:22.387+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check

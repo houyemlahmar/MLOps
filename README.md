@@ -62,7 +62,14 @@ This project implements a production-ready machine learning pipeline for diabete
 - ✅ **Docker Containerization**: Multi-service deployment with docker-compose
 - ✅ **CI/CD Pipeline**: Automated testing, building, and deployment with GitHub Actions
 - ✅ **Cloud Deployment**: GCP Cloud Run integration for scalable serving
-
+### 🔄 **Workflow Orchestration**
+- ✅ **Apache Airflow**: Complete ML pipeline orchestration and scheduling
+- ✅ **Automated DAG**: Data validation → Training → Evaluation → Deployment → Monitoring
+- ✅ **Task Dependencies**: Intelligent task ordering and parallel execution
+- ✅ **Visual Monitoring**: DAG graph visualization and execution tracking
+- ✅ **Scheduled Runs**: Daily pipeline execution at 2 AM UTC (configurable)
+- ✅ **Smart Deployment**: Automatic model deployment based on performance thresholds
+- ✅ **Pipeline Reports**: Comprehensive JSON reports for each run
 ### � **Model Monitoring & Observability**
 - ✅ **Prometheus Metrics**: Real-time metrics collection and aggregation
 - ✅ **Grafana Dashboards**: Visual monitoring with 7 comprehensive panels
@@ -96,15 +103,17 @@ This project implements a production-ready machine learning pipeline for diabete
 - **Prediction Distribution**: Class balance and positive rate tracking
 - **Data Drift Status**: Real-time drift detection alerts
 
-### 📊 **Pipeline Stages**
-1. **Data Loading**: Load raw diabetes dataset
-2. **Preprocessing**: Clean and encode categorical features
-3. **Feature Selection**: Use 8 optimal features identified through analysis
-4. **Model Training**: Train Random Forest with optimized hyperparameters
-5. **Model Evaluation**: Calculate ROC-AUC and accuracy metrics
-6. **Model Versioning**: Save models with DVC tracking
-7. **Model Serving**: Deploy via REST API with real-time predictions
-8. **Monitoring**: Track predictions, performance, and data drift with Prometheus/Grafana
+### 📊 **Pipeline Stages (Orchestrated by Airflow)**
+1. **Data Validation**: Verify data quality, schema, and completeness
+2. **Data Preprocessing**: Clean and encode categorical features
+3. **Feature Engineering**: Select and engineer optimal features
+4. **Model Training**: Train Random Forest with MLflow tracking
+5. **Model Evaluation**: Validate performance against thresholds (ROC-AUC > 0.85)
+6. **Deployment Decision**: Automatically approve or reject based on metrics
+7. **Model Registration**: Register approved models in MLflow Model Registry
+8. **Drift Monitoring**: Check for data drift using statistical tests
+9. **Model Serving**: Deploy via REST API with real-time predictions
+10. **Performance Tracking**: Monitor with Prometheus/Grafana dashboards
 
 ---
 
@@ -179,12 +188,14 @@ mlops-project/
 | **ML Framework**        | scikit-learn         | Model training & evaluation          |
 | **Experiment Tracking** | MLflow               | Experiment logging & model registry  |
 | **Data Versioning**     | DVC                  | Data & model version control         |
+| **Orchestration**       | Apache Airflow       | Pipeline automation & scheduling     |
 | **Data Processing**     | Pandas, NumPy        | Data manipulation & preprocessing    |
 | **Visualization**       | Matplotlib, Seaborn  | EDA & results visualization          |
+| **Monitoring**          | Prometheus, Grafana  | Metrics collection & dashboards      |
 | **Notebooks**           | Jupyter              | Interactive experimentation          |
 | **API Serving**         | Flask, Flask-CORS    | REST API for model predictions       |
 | **Testing**             | pytest, requests     | API testing & validation             |
-| **Deployment**   | Docker               | Containerization & orchestration     |
+| **Deployment**          | Docker               | Containerization & orchestration     |
 
 ---
 
@@ -298,6 +309,57 @@ docker-compose down
 ```bash
 docker-compose up -d --build
 ```
+
+---
+
+## 🔄 Airflow Pipeline Orchestration
+
+### Apache Airflow Setup
+
+The project uses **Apache Airflow** to orchestrate the complete ML pipeline with automated scheduling and monitoring.
+
+**Quick Start:**
+
+```bash
+# Start all services (including Airflow)
+docker-compose up -d
+
+# Wait for services to start (60 seconds)
+
+# Initialize Airflow (Windows PowerShell)
+.\scripts\setup-airflow.ps1
+
+# Initialize Airflow (Linux/Mac)
+chmod +x scripts/setup-airflow.sh
+./scripts/setup-airflow.sh
+```
+
+**Access Airflow:**
+- **Airflow UI**: http://localhost:8080 (admin/admin)
+- **MLflow UI**: http://localhost:5050
+- **Prometheus**: http://localhost:9090
+- **Grafana**: http://localhost:3000
+- **Prediction API**: http://localhost:5002
+
+### Pipeline DAG Overview
+
+The `diabetes_ml_pipeline` DAG orchestrates:
+
+```
+Start → Data Validation → Preprocessing → Feature Engineering → Training
+  → Evaluation → Deployment Decision → Model Registration → Drift Monitoring → Report → End
+```
+
+**Features:**
+- ✅ **Automated Scheduling**: Runs daily at 2 AM UTC
+- ✅ **Task Dependencies**: Intelligent task ordering and error handling
+- ✅ **Smart Deployment**: Only deploys models that meet ROC-AUC > 0.85 threshold
+- ✅ **MLflow Integration**: Automatic experiment tracking and model registry
+- ✅ **Data Validation**: Pre-training data quality checks
+- ✅ **Drift Detection**: Post-training drift monitoring
+- ✅ **Pipeline Reports**: JSON reports saved to `logs/airflow/`
+
+**For detailed setup instructions, see: [docs/AIRFLOW_SETUP.md](docs/AIRFLOW_SETUP.md)**
 
 ---
 

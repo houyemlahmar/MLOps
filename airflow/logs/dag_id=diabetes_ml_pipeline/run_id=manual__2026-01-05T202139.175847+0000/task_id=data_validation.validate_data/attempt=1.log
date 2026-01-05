@@ -1,0 +1,29 @@
+[2026-01-05T20:21:41.824+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: diabetes_ml_pipeline.data_validation.validate_data manual__2026-01-05T20:21:39.175847+00:00 [queued]>
+[2026-01-05T20:21:41.833+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: diabetes_ml_pipeline.data_validation.validate_data manual__2026-01-05T20:21:39.175847+00:00 [queued]>
+[2026-01-05T20:21:41.834+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 3
+[2026-01-05T20:21:41.850+0000] {taskinstance.py:2191} INFO - Executing <Task(PythonOperator): data_validation.validate_data> on 2026-01-05 20:21:39.175847+00:00
+[2026-01-05T20:21:41.859+0000] {standard_task_runner.py:60} INFO - Started process 1020 to run task
+[2026-01-05T20:21:41.865+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'diabetes_ml_pipeline', 'data_validation.validate_data', 'manual__2026-01-05T20:21:39.175847+00:00', '--job-id', '6', '--raw', '--subdir', 'DAGS_FOLDER/diabetes_ml_pipeline.py', '--cfg-path', '/tmp/tmpzs2em9oz']
+[2026-01-05T20:21:41.869+0000] {standard_task_runner.py:88} INFO - Job 6: Subtask data_validation.validate_data
+[2026-01-05T20:21:41.929+0000] {task_command.py:423} INFO - Running <TaskInstance: diabetes_ml_pipeline.data_validation.validate_data manual__2026-01-05T20:21:39.175847+00:00 [running]> on host b31418071fbd
+[2026-01-05T20:21:42.009+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='mlops-team' AIRFLOW_CTX_DAG_ID='diabetes_ml_pipeline' AIRFLOW_CTX_TASK_ID='data_validation.validate_data' AIRFLOW_CTX_EXECUTION_DATE='2026-01-05T20:21:39.175847+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-05T20:21:39.175847+00:00'
+[2026-01-05T20:21:42.032+0000] {taskinstance.py:2698} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/models/taskinstance.py", line 428, in _execute_task
+    result = execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/python.py", line 199, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.11/site-packages/airflow/operators/python.py", line 216, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/diabetes_ml_pipeline.py", line 49, in validate_data
+    from src.data import load_data
+  File "/opt/airflow/project/src/data.py", line 2, in <module>
+    from sklearn.model_selection import train_test_split
+ModuleNotFoundError: No module named 'sklearn'
+[2026-01-05T20:21:42.049+0000] {taskinstance.py:1138} INFO - Marking task as UP_FOR_RETRY. dag_id=diabetes_ml_pipeline, task_id=data_validation.validate_data, execution_date=20260105T202139, start_date=20260105T202141, end_date=20260105T202142
+[2026-01-05T20:21:42.063+0000] {standard_task_runner.py:107} ERROR - Failed to execute job 6 for task data_validation.validate_data (No module named 'sklearn'; 1020)
+[2026-01-05T20:21:42.079+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 1
+[2026-01-05T20:21:42.117+0000] {taskinstance.py:3280} INFO - 0 downstream tasks scheduled from follow-on schedule check
