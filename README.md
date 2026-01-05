@@ -111,7 +111,7 @@ This project implements a production-ready machine learning pipeline for diabete
 5. **Model Evaluation**: Validate performance against thresholds (ROC-AUC > 0.85)
 6. **Deployment Decision**: Automatically approve or reject based on metrics
 7. **Model Registration**: Register approved models in MLflow Model Registry
-8. **Drift Monitoring**: Check for data drift using statistical tests
+8. **Drift Monitoring**: Check for data drift using Kolmogorov-Smirnov test
 9. **Model Serving**: Deploy via REST API with real-time predictions
 10. **Performance Tracking**: Monitor with Prometheus/Grafana dashboards
 
@@ -161,20 +161,45 @@ mlops-project/
 │       └── app.js                 # UI JavaScript 
 │
 ├── tests/
-│   └── test_api.py                # API endpoint testing suite 
+│   └── test_api.py                # API endpoint testing suite
+│
+├── airflow/
+│   ├── Dockerfile                 # Custom Airflow image with ML dependencies
+│   ├── requirements.txt           # Airflow-specific Python packages
+│   ├── dags/
+│   │   └── diabetes_ml_pipeline.py # Complete ML pipeline DAG
+│   ├── logs/                      # Airflow task execution logs
+│   ├── plugins/                   # Custom Airflow plugins
+│   └── config/                    # Airflow configuration files
+│
+├── grafana/
+│   ├── dashboards.yml             # Dashboard provisioning config
+│   └── datasources.yml            # Prometheus data source config
+│
+├── scripts/
+│   ├── setup-airflow.ps1          # Airflow initialization (Windows)
+│   ├── setup-airflow.sh           # Airflow initialization (Linux/Mac)
+│   └── setup-gcp.sh               # GCP deployment setup script 
 │
 ├── docs/
-│   └── API_DOCUMENTATION.md       # Complete API reference 
+│   ├── API_DOCUMENTATION.md       # Complete API reference
+│   ├── AIRFLOW_SETUP.md           # Airflow installation & usage guide
+│   └── MONITORING_SETUP.md        # Prometheus & Grafana setup 
 │
 ├── mlruns/                        # MLflow tracking directory
+├── logs/
+│   └── monitoring/                # Model monitoring & drift reports
 ├── dvc.yaml                       # DVC pipeline definition
 ├── dvc.lock                       # DVC pipeline lock file
 ├── params.yaml                    # Training hyperparameters
 ├── requirements.txt               # Python dependencies
-├── Dockerfile                     # Docker container definition 
-├── docker-compose.yml             # Docker orchestration 
-├── .dockerignore                  # Docker build exclusions 
-├── QUICKSTART.md                  # Quick start guide 
+├── Dockerfile                     # Docker container definition
+├── docker-compose.yml             # Multi-service orchestration (7 services)
+├── prometheus.yml                 # Prometheus metrics configuration
+├── grafana-dashboard.json         # Pre-built Grafana dashboard
+├── scheduler.py                   # Alternative lightweight scheduler
+├── .dockerignore                  # Docker build exclusions
+├── QUICKSTART.md                  # Quick start guide
 └── README.md                      # This file
 ```
 
@@ -287,13 +312,21 @@ Then navigate to: [http://localhost:5000](http://localhost:5000)
 docker-compose up -d
 ```
 
-This will start:
+This will start **7 services**:
 - **Diabetes Prediction API + Web UI** on port **5002**
 - **MLflow Tracking Server** on port **5050**
+- **Apache Airflow Webserver** on port **8080**
+- **Apache Airflow Scheduler** (background)
+- **PostgreSQL Database** (Airflow metadata)
+- **Prometheus** on port **9090**
+- **Grafana** on port **3000**
 
 **Access the applications:**
 - **Web UI:** [http://localhost:5002](http://localhost:5002)
 - **MLflow UI:** [http://localhost:5050](http://localhost:5050)
+- **Airflow UI:** [http://localhost:8080](http://localhost:8080) (admin/admin)
+- **Prometheus:** [http://localhost:9090](http://localhost:9090)
+- **Grafana:** [http://localhost:3000](http://localhost:3000) (admin/admin)
 
 **View logs:**
 ```bash
@@ -454,6 +487,30 @@ curl -X POST http://localhost:5002/predict \
 python tests/test_api.py
 ```
 
+### 🔹 Monitoring & Observability
+
+**Start Prometheus + Grafana:**
+```bash
+docker-compose up -d prometheus grafana
+```
+
+**Access dashboards:**
+- **Prometheus**: http://localhost:9090 (metrics & queries)
+- **Grafana**: http://localhost:3000 (admin/admin)
+
+**Import pre-built dashboard:**
+1. Navigate to Grafana → Dashboards → Import
+2. Upload `grafana-dashboard.json`
+3. Select Prometheus data source
+
+**Available metrics:**
+- Prediction request rate and latency
+- Model confidence distribution
+- Data drift detection alerts
+- Request count by endpoint and prediction class
+
+**For detailed setup, see: [docs/MONITORING_SETUP.md](docs/MONITORING_SETUP.md)**
+
 ### 🔹 Run Jupyter Notebooks
 ```bash
 jupyter notebook
@@ -584,70 +641,17 @@ The following features were selected based on correlation analysis and domain kn
 
 ---
 
-## 🔮 Next Steps
+## 📚 Documentation
 
-### 🎯 Completed Features ✅
-
-1. **Model Serving & Deployment** ✅ COMPLETED
-   - [x] Implement REST API using Flask (`src/serve.py`)
-   - [x] Add prediction endpoint with input validation
-   - [x] Create comprehensive API documentation
-   - [x] Add health check and monitoring endpoints
-   - [x] Implement batch prediction support
-   - [x] Create automated test suite (6/6 tests passing)
-   - [x] Build Web UI with HTML/CSS/JavaScript
-   - [x] Add sample data loading and result visualization
-   - [x] Docker containerization with docker-compose
-   - [x] MLflow integration in containers
-
-2. **CI/CD Pipeline** ✅ COMPLETED
-   - [x] Set up GitHub Actions workflows
-   - [x] Automate testing (unit tests, data validation, model checks)
-   - [x] Automate model retraining on schedule (Mondays 2 AM)
-   - [x] Docker build and push to registries
-   - [x] Deploy to GCP Cloud Run
-   - [x] Slack notifications for deployments
-   - [x] Security scanning with Trivy
-
-### 🎯 Future Enhancements
-
-3. **Monitoring & Observability** 🎯 NEXT PRIORITY
-   - [ ] Implement model drift detection
-   - [ ] Add Prometheus metrics export
-   - [ ] Set up Grafana dashboards
-   - [ ] Log prediction requests and responses
-   - [ ] A/B testing framework
-   - [ ] Real-time performance monitoring
-
-4. **Model Evaluation & Validation**
-   - [ ] Complete `src/eval.py` with comprehensive metrics
-   - [ ] Add cross-validation reports
-   - [ ] Implement model validation checks before deployment
-   - [ ] Create performance comparison visualizations
-
-6. **Data Pipeline Enhancements**
-   - [ ] Automate data ingestion from external sources
-   - [ ] Add data quality checks and validation
-   - [ ] Implement data preprocessing as a DVC stage
-   - [ ] Set up automated feature engineering pipeline
-
-7. **Documentation & Best Practices**
-   - [ ] Add API documentation (Swagger/OpenAPI)
-   - [ ] Create deployment guide
-   - [ ] Document model assumptions and limitations
-   - [ ] Add code quality checks (linting, type hints)
-
-### 🚀 Advanced Features (Future)
-
-- **A/B Testing Framework**: Compare model versions in production
-- **Feature Store**: Centralized feature management
-- **Online Learning**: Incremental model updates
-- **Multi-model Ensemble**: Combine predictions from multiple models
-- **Explainability**: SHAP values, LIME for model interpretability
-- **Cloud Deployment**: AWS SageMaker, Azure ML, or GCP AI Platform
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide for new users
+- **[docs/API_DOCUMENTATION.md](docs/API_DOCUMENTATION.md)** - Complete REST API reference
+- **[docs/AIRFLOW_SETUP.md](docs/AIRFLOW_SETUP.md)** - Airflow installation & DAG configuration
+- **[docs/MONITORING_SETUP.md](docs/MONITORING_SETUP.md)** - Prometheus & Grafana setup guide
+- **[.github/SECRETS_SETUP.md](.github/SECRETS_SETUP.md)** - GitHub Actions secrets configuration
+- **[.github/GCP_DEPLOYMENT.md](.github/GCP_DEPLOYMENT.md)** - GCP Cloud Run deployment guide
 
 ---
 
 **Built with ❤️ by Houyem Lahmar - Software Engineer**
 
-*Last Updated: January 05, 2026*
+*Last Updated: January 06, 2026*
