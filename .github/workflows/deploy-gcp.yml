@@ -84,7 +84,7 @@ jobs:
         echo "- [Web UI](${{ steps.service-url.outputs.url }})" >> $GITHUB_STEP_SUMMARY
     
     - name: Send Slack notification
-      if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      if: secrets.SLACK_WEBHOOK_URL != ''
       uses: slackapi/slack-github-action@v1
       with:
         payload: |
@@ -127,7 +127,7 @@ jobs:
       continue-on-error: true
     
     - name: Notify on failure
-      if: failure() && ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+      if: failure() && secrets.SLACK_WEBHOOK_URL != ''
       uses: slackapi/slack-github-action@v1
       with:
         payload: |
