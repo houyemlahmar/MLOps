@@ -1,5 +1,9 @@
 name: CI - Tests & Validation
 
+permissions:
+  contents: read
+  security-events: write
+
 on:
   push:
     branches: [ main, develop ]
@@ -89,9 +93,16 @@ jobs:
         python -c "
         import pandas as pd
         import sys
+        from pathlib import Path
+        
+        # Check if data file exists
+        data_path = Path('data/raw/diabetes.csv')
+        if not data_path.exists():
+            print('⚠️  Warning: diabetes.csv not found, skipping validation')
+            sys.exit(0)
         
         # Load data
-        df = pd.read_csv('data/raw/diabetes.csv')
+        df = pd.read_csv(data_path)
         
         # Validate schema
         required_columns = ['age', 'bmi', 'HbA1c_level', 'blood_glucose_level', 
@@ -204,7 +215,7 @@ jobs:
         output: 'trivy-results.sarif'
     
     - name: Upload Trivy results to GitHub Security
-      uses: github/codeql-action/upload-sarif@v3
+      uses: github/codeql-action/upload-sarif@v4
       with:
         sarif_file: 'trivy-results.sarif'
       continue-on-error: true
