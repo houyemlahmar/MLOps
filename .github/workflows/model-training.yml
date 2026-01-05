@@ -7,12 +7,12 @@ on:
         description: 'Force model retraining'
         required: false
         default: 'false'
-  schedule:
-    # Run every Monday at 2 AM UTC
-    - cron: '0 2 * * 1'
-  push:
-    paths:
-      - 'data/**'
+  # schedule:
+  #   # Run every Monday at 2 AM UTC
+  #   - cron: '0 2 * * 1'
+  # push:
+  #   paths:
+  #     - 'data/**'
       - 'params.yaml'
       - 'src/train_final.py'
 

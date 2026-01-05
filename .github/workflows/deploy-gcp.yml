@@ -1,11 +1,11 @@
 name: Deploy to GCP Cloud Run
 
 on:
-  workflow_run:
-    workflows: ["Docker Build & Push"]
-    types:
-      - completed
-  workflow_dispatch:
+  workflow_dispatch:  # Manual trigger only
+  # workflow_run:
+  #   workflows: ["Docker Build & Push"]
+  #   types:
+  #     - completed
 
 env:
   GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
