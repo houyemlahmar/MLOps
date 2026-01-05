@@ -63,7 +63,16 @@ This project implements a production-ready machine learning pipeline for diabete
 - ✅ **CI/CD Pipeline**: Automated testing, building, and deployment with GitHub Actions
 - ✅ **Cloud Deployment**: GCP Cloud Run integration for scalable serving
 
-### 🚀 **CI/CD & Automation**
+### � **Model Monitoring & Observability**
+- ✅ **Prometheus Metrics**: Real-time metrics collection and aggregation
+- ✅ **Grafana Dashboards**: Visual monitoring with 7 comprehensive panels
+- ✅ **Data Drift Detection**: Statistical drift analysis with Kolmogorov-Smirnov test
+- ✅ **Prediction Logging**: Automatic logging of all predictions with timestamps
+- ✅ **Performance Tracking**: Request rate, latency, and confidence score monitoring
+- ✅ **Alert Generation**: Automated alerts for drift and anomalies
+- ✅ **Metrics Endpoint**: `/metrics` endpoint for Prometheus scraping
+
+### �🚀 **CI/CD & Automation**
 - ✅ **Automated Testing**: Unit tests, data validation, and model performance checks
 - ✅ **Continuous Integration**: Linting, security scanning, and coverage reports
 - ✅ **Docker Build & Push**: Automated image building to GitHub Container Registry & GCP
@@ -71,12 +80,21 @@ This project implements a production-ready machine learning pipeline for diabete
 - ✅ **Scheduled Retraining**: Weekly model retraining (Mondays at 2 AM UTC)
 - ✅ **Slack Notifications**: Real-time alerts for deployments and failures
 
-### � **REST API Endpoints**
+### 🌐 **REST API Endpoints**
 - ✅ **GET /health**: Health check and service status
 - ✅ **GET /info**: Model information, features, and performance metrics
 - ✅ **POST /predict**: Single patient diabetes prediction with probabilities
 - ✅ **POST /predict/batch**: Batch predictions for multiple patients
+- ✅ **GET /metrics**: Prometheus metrics for monitoring
 - ✅ **Error Handling**: Input validation, 404, and 500 error responses
+
+### 🎯 **Monitoring Metrics**
+- **Prediction Requests**: Total requests by endpoint and prediction class
+- **Request Rate**: Per-second prediction rate over time
+- **Prediction Latency**: Response time histogram and percentiles
+- **Model Confidence**: Average probability scores and distribution
+- **Prediction Distribution**: Class balance and positive rate tracking
+- **Data Drift Status**: Real-time drift detection alerts
 
 ### 📊 **Pipeline Stages**
 1. **Data Loading**: Load raw diabetes dataset
@@ -86,6 +104,7 @@ This project implements a production-ready machine learning pipeline for diabete
 5. **Model Evaluation**: Calculate ROC-AUC and accuracy metrics
 6. **Model Versioning**: Save models with DVC tracking
 7. **Model Serving**: Deploy via REST API with real-time predictions
+8. **Monitoring**: Track predictions, performance, and data drift with Prometheus/Grafana
 
 ---
 
@@ -120,33 +139,33 @@ mlops-project/
 │   ├── train_final.py             # Final model training with best params
 │   ├── eval.py                    # Model evaluation script
 │   ├── features.py                # Feature engineering utilities
-│   ├── serve.py                   # REST API + Web UI for model serving ✅
+│   ├── serve.py                   # REST API + Web UI for model serving 
 │   └── selected_features.json     # Optimal features list
 │
 ├── templates/
-│   └── index.html                 # Web UI interface ✅
+│   └── index.html                 # Web UI interface 
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css              # UI styling ✅
+│   │   └── style.css              # UI styling 
 │   └── js/
-│       └── app.js                 # UI JavaScript ✅
+│       └── app.js                 # UI JavaScript 
 │
 ├── tests/
-│   └── test_api.py                # API endpoint testing suite ✅
+│   └── test_api.py                # API endpoint testing suite 
 │
 ├── docs/
-│   └── API_DOCUMENTATION.md       # Complete API reference ✅
+│   └── API_DOCUMENTATION.md       # Complete API reference 
 │
 ├── mlruns/                        # MLflow tracking directory
 ├── dvc.yaml                       # DVC pipeline definition
 ├── dvc.lock                       # DVC pipeline lock file
 ├── params.yaml                    # Training hyperparameters
 ├── requirements.txt               # Python dependencies
-├── Dockerfile                     # Docker container definition ✅
-├── docker-compose.yml             # Docker orchestration ✅
-├── .dockerignore                  # Docker build exclusions ✅
-├── QUICKSTART.md                  # Quick start guide ✅
+├── Dockerfile                     # Docker container definition 
+├── docker-compose.yml             # Docker orchestration 
+├── .dockerignore                  # Docker build exclusions 
+├── QUICKSTART.md                  # Quick start guide 
 └── README.md                      # This file
 ```
 
@@ -165,7 +184,7 @@ mlops-project/
 | **Notebooks**           | Jupyter              | Interactive experimentation          |
 | **API Serving**         | Flask, Flask-CORS    | REST API for model predictions       |
 | **Testing**             | pytest, requests     | API testing & validation             |
-| **Deployment (Next)**   | Docker               | Containerization & orchestration     |
+| **Deployment**   | Docker               | Containerization & orchestration     |
 
 ---
 
@@ -460,7 +479,23 @@ stages:
 | Random Forest (Grid Search)   | 0.9707           | 0.9707           |
 | Random Forest (Random Search) | 0.9709           | 0.9707           |
 
-### 📈 Selected Features (8 features)
+### � Understanding ROC-AUC Score
+
+**What is ROC-AUC?**  
+ROC-AUC (Receiver Operating Characteristic - Area Under Curve) measures how well the model distinguishes between diabetic and non-diabetic patients.
+
+**Simple Interpretation:**
+- **Score: 0.9707 = 97.07%** probability that the model correctly ranks a diabetic patient as higher risk than a non-diabetic patient
+- **Range:** 0.5 (random guessing) to 1.0 (perfect classification)
+- **Our Score (0.9707):** Excellent! The model is highly reliable for diabetes prediction
+
+**Why ROC-AUC instead of Accuracy?**
+- Works better with imbalanced datasets (when diabetic patients are fewer than non-diabetic)
+- Evaluates model performance across all decision thresholds, not just one
+- More suitable for medical predictions where different risk thresholds may be needed
+- Captures the trade-off between catching all diabetic cases vs. avoiding false alarms
+
+### �📈 Selected Features (8 features)
 The following features were selected based on correlation analysis and domain knowledge:
 
 1. `age`
@@ -551,44 +586,6 @@ The following features were selected based on correlation analysis and domain kn
 
 ---
 
-## 🤝 Contributing
+**Built with ❤️ by Houyem Lahmar - Software Engineer**
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Guidelines
-- Write clean, documented code
-- Add unit tests for new features
-- Update documentation as needed
-- Follow PEP 8 style guide
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- Dataset source: [Diabetes dataset]
-- MLOps tools: DVC, MLflow
-- scikit-learn community
-
----
-
-## 📞 Contact
-
-For questions or feedback, please open an issue or contact the project maintainer.
-
----
-
-**Built with ❤️ by the MLOps Team**
-
-*Last Updated: November 30, 2025*
+*Last Updated: January 05, 2026*
