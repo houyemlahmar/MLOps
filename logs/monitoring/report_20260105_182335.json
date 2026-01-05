@@ -1,0 +1,156 @@
+{
+  "timestamp": "2026-01-05T18:23:35.730088",
+  "data_samples": 100,
+  "drift_detection": {
+    "timestamp": "2026-01-05T18:23:35.730141",
+    "features": {
+      "age": {
+        "ks_statistic": 0.07,
+        "p_value": 0.9684099261397212,
+        "is_drifted": false,
+        "current_mean": 42.17,
+        "reference_mean": 41.885856,
+        "mean_difference": 0.28414400000000484
+      },
+      "bmi": {
+        "ks_statistic": 0.18,
+        "p_value": 0.07822115797841851,
+        "is_drifted": false,
+        "current_mean": 27.453600000000005,
+        "reference_mean": 27.3207671,
+        "mean_difference": 0.13283290000000392
+      },
+      "HbA1c_level": {
+        "ks_statistic": 0.18,
+        "p_value": 0.07822115797841851,
+        "is_drifted": false,
+        "current_mean": 5.309000000000001,
+        "reference_mean": 5.527507,
+        "mean_difference": -0.2185069999999989
+      },
+      "blood_glucose_level": {
+        "ks_statistic": 0.24,
+        "p_value": 0.0061340334218580265,
+        "is_drifted": true,
+        "current_mean": 133.82,
+        "reference_mean": 138.05806,
+        "mean_difference": -4.238060000000019
+      },
+      "hypertension": {
+        "ks_statistic": 0.49,
+        "p_value": 2.948425133635738e-11,
+        "is_drifted": true,
+        "current_mean": 0.08,
+        "reference_mean": 0.07485,
+        "mean_difference": 0.005150000000000002
+      },
+      "heart_disease": {
+        "ks_statistic": 0.56,
+        "p_value": 8.771130313572204e-15,
+        "is_drifted": true,
+        "current_mean": 0.04,
+        "reference_mean": 0.03942,
+        "mean_difference": 0.0005800000000000041
+      },
+      "gender": {
+        "ks_statistic": 0.34,
+        "p_value": 1.605714367105695e-05,
+        "is_drifted": true,
+        "current_mean": 0.45,
+        "reference_mean": 0.41466,
+        "mean_difference": 0.03534000000000004
+      },
+      "smoking_history": {
+        "ks_statistic": 0.23,
+        "p_value": 0.009878183186176536,
+        "is_drifted": true,
+        "current_mean": 2.18,
+        "reference_mean": 2.17965,
+        "mean_difference": 0.0003500000000000725
+      }
+    },
+    "overall_drift": true,
+    "drifted_features": [
+      "blood_glucose_level",
+      "hypertension",
+      "heart_disease",
+      "gender",
+      "smoking_history"
+    ],
+    "drift_percentage": 62.5
+  },
+  "prediction_distribution": {
+    "error": "No prediction logs found"
+  },
+  "feature_comparison": {
+    "age": {
+      "reference_mean": 41.885856,
+      "current_mean": 42.17,
+      "mean_shift_percent": 0.6783769681106788,
+      "reference_std": 22.516839871617023,
+      "current_std": 22.678720057233022
+    },
+    "bmi": {
+      "reference_mean": 27.3207671,
+      "current_mean": 27.453600000000005,
+      "mean_shift_percent": 0.48619754897000644,
+      "reference_std": 6.636783416648369,
+      "current_std": 7.196153226031618
+    },
+    "HbA1c_level": {
+      "reference_mean": 5.527507,
+      "current_mean": 5.309000000000001,
+      "mean_shift_percent": -3.9530840937876497,
+      "reference_std": 1.0706720918835437,
+      "current_std": 1.1366346747475127
+    },
+    "blood_glucose_level": {
+      "reference_mean": 138.05806,
+      "current_mean": 133.82,
+      "mean_shift_percent": -3.069766444639319,
+      "reference_std": 40.708136048704134,
+      "current_std": 33.26792977501232
+    },
+    "hypertension": {
+      "reference_mean": 0.07485,
+      "current_mean": 0.08,
+      "mean_shift_percent": 6.880427521710089,
+      "reference_std": 0.2631504702289164,
+      "current_std": 0.27265992434429076
+    },
+    "heart_disease": {
+      "reference_mean": 0.03942,
+      "current_mean": 0.04,
+      "mean_shift_percent": 1.4713343480466874,
+      "reference_std": 0.1945930169980995,
+      "current_std": 0.1969463855669324
+    },
+    "gender": {
+      "reference_mean": 0.41466,
+      "current_mean": 0.45,
+      "mean_shift_percent": 8.522645058602238,
+      "reference_std": 0.4930309475024381,
+      "current_std": 0.5
+    },
+    "smoking_history": {
+      "reference_mean": 2.17965,
+      "current_mean": 2.18,
+      "mean_shift_percent": 0.016057623930450876,
+      "reference_std": 1.8896591188931022,
+      "current_std": 1.8607047649270485
+    }
+  },
+  "alerts": [
+    {
+      "severity": "WARNING",
+      "message": "Data drift detected in 5 features",
+      "features": [
+        "blood_glucose_level",
+        "hypertension",
+        "heart_disease",
+        "gender",
+        "smoking_history"
+      ]
+    }
+  ]
+}
