@@ -87,6 +87,7 @@ jobs:
         docker push ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/diabetes-prediction/api:latest
     
     - name: Send Slack notification
+      if: vars.SLACK_WEBHOOK_URL != ''
       uses: slackapi/slack-github-action@v1
       with:
         payload: |
