@@ -61,7 +61,7 @@ This project implements a production-ready machine learning pipeline for diabete
 - ✅ **Web UI**: Professional responsive interface for predictions
 - ✅ **Docker Containerization**: Multi-service deployment with docker-compose
 - ✅ **CI/CD Pipeline**: Automated testing, building, and deployment with GitHub Actions
-- ✅ **Cloud Deployment**: GCP Cloud Run integration for scalable serving
+- 📋 **Cloud Deployment (Optional)**: GCP Cloud Run workflows configured and ready to deploy
 ### 🔄 **Workflow Orchestration**
 - ✅ **Apache Airflow**: Complete ML pipeline orchestration and scheduling
 - ✅ **Automated DAG**: Data validation → Training → Evaluation → Deployment → Monitoring
@@ -277,7 +277,23 @@ dvc pull
 
 ---
 
-## 💻 Usage
+## � Current Deployment Status
+
+**Active:**
+- ✅ **Local Development**: Full-featured development environment
+- ✅ **Docker Compose**: 7-service containerized stack (API, MLflow, Airflow, Prometheus, Grafana)
+- ✅ **CI/CD**: GitHub Actions for testing and Docker builds
+- ✅ **Monitoring**: Real-time Prometheus/Grafana dashboards
+
+**Configured (Ready to Activate):**
+- 📋 **GCP Cloud Run**: Deployment workflow ready, requires GCP account setup
+- 📋 **Automated Retraining**: Weekly model training workflow (can be enabled)
+
+**Recommended Deployment**: Use Docker Compose for production-grade deployment (all services included)
+
+---
+
+## �💻 Usage
 
 ### 🔹 Run the Complete DVC Pipeline
 ```bash
@@ -425,25 +441,25 @@ Triggers on push to `main` or version tags:
 - ✅ Push to GCP Artifact Registry
 - ✅ Image tagging and versioning
 
-#### 4. **Deploy to GCP** (`.github/workflows/deploy-gcp.yml`)
-Triggers after successful Docker build:
-- ✅ Deploy to Cloud Run
-- ✅ Health check validation
-- ✅ Slack deployment notification
-- ✅ Automatic rollback on failure
+#### 4. **Deploy to GCP (Optional)** (`.github/workflows/deploy-gcp.yml`)
+**Status**: Workflow configured but not yet activated. Ready for deployment when needed.
+- 📋 Deploy to Cloud Run (workflow ready)
+- 📋 Health check validation
+- 📋 Slack deployment notification
+- 📋 Automatic rollback on failure
 
 ### Setup CI/CD
 
-1. **Configure GitHub Secrets:**
-   - See [`.github/SECRETS_SETUP.md`](.github/SECRETS_SETUP.md) for detailed instructions
-   - Required: `GCP_PROJECT_ID`, `GCP_SA_KEY`
-   - Optional: `SLACK_WEBHOOK_URL`
+1. **Active Workflows:**
+   - ✅ CI Tests: Running on every push/PR
+   - ✅ Docker Build: Available via manual trigger
+   - 📋 GCP Deployment: Configured but not activated (optional)
 
-2. **GCP Deployment:**
+2. **To Enable GCP Deployment (Optional):**
    - Follow [`.github/GCP_DEPLOYMENT.md`](.github/GCP_DEPLOYMENT.md) for complete setup
-   - Service runs on GCP Cloud Run
-   - Auto-scaling: 0-10 instances
-   - Region: `us-central1`
+   - Configure GitHub Secrets: `GCP_PROJECT_ID`, `GCP_SA_KEY`
+   - Uncomment workflow triggers in deployment files
+   - Service will run on GCP Cloud Run with auto-scaling (0-10 instances)
 
 3. **Monitor Workflows:**
    - View in GitHub Actions tab
